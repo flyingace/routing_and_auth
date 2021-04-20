@@ -11,25 +11,50 @@ import {
 const fakeAuth = {
   isAuthenticated: false,
   authenticate(cb) {
-    this.isAuthenticated = true
-    setTimeout(cb, 100) // fake async
+    this.isAuthenticated = true;
+    setTimeout(cb, 100); // fake async
   },
   signout(cb) {
-    this.isAuthenticated = false
-    setTimeout(cb, 100) // fake async
-  }
+    this.isAuthenticated = false;
+    setTimeout(cb, 100); // fake async
+  },
 }
 
-const Home = () => <h3>Home</h3>
-const Notifications = () => <h3>Notifications</h3>
+const Navigation = () => {
+  return (
+    <div className="navigation">
+      This is our navigation.
+      <AuthButton />
+
+      <ul>
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/notifications">Notifications</Link></li>
+      </ul>
+    </div>);
+};
+
+const Home = () => {
+  return (
+    <div className="page home">
+      <h3>This is the Home page.</h3>
+    </div>
+  );
+};
+
+const Notifications = () => {
+  return (
+    <div className="page notifications">
+      <h3>Notifications</h3>
+    </div>);
+};
 
 function Login() {
   const [
     redirectToReferrer,
-    setRedirectToReferrer
-  ] = React.useState(false)
+    setRedirectToReferrer,
+  ] = React.useState(false);
 
-  const { state } = useLocation()
+  const { state } = useLocation();
 
   const login = () => fakeAuth.authenticate(() => {
     setRedirectToReferrer(true)
@@ -76,21 +101,18 @@ export default function App() {
   return (
     <Router>
       <div>
-        <AuthButton />
 
-        <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/notifications">Notifications</Link></li>
-        </ul>
 
         <Route exact path="/">
-          <Home/>
+          <Navigation />
+          <Home />
         </Route>
         <Route path="/login">
           <Login />
         </Route>
-        <PrivateRoute path='/notifications'>
-          <Notifications/>
+        <PrivateRoute path="/notifications">
+          <Navigation />
+          <Notifications />
         </PrivateRoute>
       </div>
     </Router>
